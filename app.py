@@ -115,18 +115,31 @@ def servery_food_exclude(food, dining_data):
     serveries = []
     for row in dining_data:
         servery = row[0].lower()
-        if (food not in row[3].lower().split()) and (food not in row[2].lower().split()) and servery not in serveries:
+        if(food == "dairy"):
+           if ("milk" not in row[3].lower().split()) and ("milk" not in row[2].lower().split()):
+                if ("cheese" not in row[3].lower().split()) and ("cheese" not in row[2].lower().split()):
+                    if ("yogurt" not in row[3].lower().split()) and ("yogurt" not in row[2].lower().split()):
+                        if ("butter" not in row[3].lower().split()) and ("butter" not in row[2].lower().split()):
+                            if ("cream" not in row[3].lower().split()) and ("cream" not in row[2].lower().split()) and servery not in serveries:
+                                serveries.append(servery)
+        elif: (food not in row[3].lower().split()) and (food not in row[2].lower().split()) and servery not in serveries:
             serveries.append(servery)
-
     return serveries
 
 def single_servery_food_exclude(food, servery, dining_data):
     meals = []
     for row in dining_data:
-        serv = row[0].lower()
+        serv = row[0].lower()                    
         if servery == serv:
-            if food not in row[2].lower().split() and food not in row[3].lower().split():
-                meals.append(row[2])
+            if(food == "dairy"):
+                if ("milk" not in row[3].lower().split()) and ("milk" not in row[2].lower().split()):
+                    if ("cheese" not in row[3].lower().split()) and ("cheese" not in row[2].lower().split()):
+                        if ("yogurt" not in row[3].lower().split()) and ("yogurt" not in row[2].lower().split()):
+                            if ("butter" not in row[3].lower().split()) and ("butter" not in row[2].lower().split()):
+                                if ("cream" not in row[3].lower().split()) and ("cream" not in row[2].lower().split()) and servery not in serveries:
+                                    serveries.append(servery)               
+            elif: food not in row[2].lower().split() and food not in row[3].lower().split():
+                  meals.append(row[2])
 
     return meals
 
