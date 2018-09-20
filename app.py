@@ -24,13 +24,14 @@ bot = Bot(ACCESS_TOKEN) ## Create an instance of the bot
 
 HELP_MESSAGE = "I can provide information about dining options, allergies, and schedules here at Rice!"
 EXAMPLES = ["gluten-free", "is there vegetarian at West or Seibel?", "are eggs served at North today?", "vegan at South?", "west"]
+EMOJIS = [u'\U001F600', u'\U001F44C', u'\U001F64C', u'\U001F37D']
 
 EATERIES = ["west", "north", "south", "seibel", "sid", "baker", "sammy's"]
 CONFIDENCE_THRESH = .575
 #MEALTIMES = {"breakfast" : }
 
 def help_statement():
-    return HELP_MESSAGE + " Ask me a question like \"" + random.choice(EXAMPLES) + "\"" + u'\U0001F604'
+    return HELP_MESSAGE + " Ask me a question like \"" + random.choice(EXAMPLES) + "\"" + random.choice(EMOJIS)
 
 def verify_fb_token(token_sent):
     ## Verifies that the token sent by Facebook matches the token sent locally
