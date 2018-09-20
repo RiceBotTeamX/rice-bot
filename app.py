@@ -63,7 +63,7 @@ def dining_reader():
     # If there is no file in the data folder with todays date, call ruby.
     # Else, use the file in the data folder.
     if (not os.path.isfile(dining_data_file)):
-        subprocess.check_output(['python3', dir_path+'/severyAPI/getMenu.py', filename])
+        subprocess.check_output(['python3', dir_path+'/serveryAPI/getMenu.py', filename])
 
     dining_data = []
     with open(dining_data_file) as csv_file:
