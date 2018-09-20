@@ -1,39 +1,24 @@
 # Eat Rice Bot
 
-Eat Rice Bot is an interactive Facebook Messenger chatbot that provides information about dining here at Rice!
+Eat Rice Bot is an interactive Facebook Messenger chatbot that provides information about dining here at Rice! It uses information from the Rice servery websites and NLP to answer nuanced questions about meals, eateries, and dietary restrictions.
+Try it in browser or on mobile:
+https://www.facebook.com/TXBOTT/
 
 Some sample questions include:
--* What rice dishes can I eat around McMurtry?
--* Where can I eat chicken?
--* Colleges serving stuff without eggs?
--* Vegetarian?
--* gluten-free options at South or Sid?
--* What's on the menu at North and West?
+* What rice dishes can I eat around McMurtry?
+* Where can I get chicken?
+* Colleges serving stuff without eggs?
+* Vegetarian?
+* gluten-free options at North or Seibel?
+* What's on the menu at South and West?
+* im vegan
 
 ## Implementation
 
-There are three main parts to this innovation. 
+There are three main parts: language processing, data collection, and internal logic to combine the two.
 
-The first developer engine we used was wit.ai which is a developer engine that uses natural language processing and machine learning to analyze
-user inputs and categorize words. This engine also gives back threshold numbers and precision data which can be used to program interactive
-responses. The link is below.
+For input processing, we utilize [Wit.ai](https://wit.ai), a developer engine that uses natural language processing and machine learning to analyze user inputs and categorize words.
 
-[Wit.ai](https://wit.ai)
+To generate our data on eateries, we pull data from the Rice servery website using the [Rice Dining](github.com/numinit/rice-dining) API and a Ruby library integrated with Python. Currently, we pull information once a day to ensure that users get up-to-date, accurate information.
 
-The next part to this bot was the program that pulled data from the rice servery website and converted this information into a csv file. We implemented
-this with the rice-dining API and a Ruby library integrated into Python. This pulls information once a day to ensure that the user gets up 
-to date information for accurate responses.
-
-[Rice Dining](github.com/numinit/rice-dining)
-
-Finally, the last part was the web server. This allowed us to host the bot and allow the user to interact with this innovation 24/7.
-
-Eat Rice Bot uses information from the Rice servery websites and NLP to answer nuanced questions about meals, eateries, and dietary restrictions. Try it!
-
-## Demo
-(not public yet, contact us for testing permission)
-```
-https://www.facebook.com/TXBOTT/
-```
-
-##
+We host Eat Rice Bot 24/7 on the Heroku platform. Eat Rice Bot may take a minute or two to boot up and respond to your first message, but all conversation following the initial communication should be significantly faster.
