@@ -26,7 +26,7 @@ bot = Bot(ACCESS_TOKEN) ## Create an instance of the bot
 HELP_MESSAGE = "I provide information about dining options, dietary restrictions, and schedules here at Rice!"
 EXAMPLES = ["gluten-free", "is there vegetarian at West or South?", "r there eggs at North today?",
             "vegan at Sid?", "seibel", "where can i get chicken?", "what can i eat around McMurtry?"]
-EMOJIS = {"happy":'\U0001F600', "ok":'\U0001F44C', "praise":'\U0001F64C', "plate":'\U0001F37D'}
+EMOJIS = {"happy":'\U0001F600', "ok":'\U0001F44C', "praise":'\U0001F64C', "plate":'\U0001F37D', "fork":'\U0001F374', "owl":'\U0001F989' }
 
 EATERIES = ["west", "north", "south", "seibel", "sidrich", "baker", "sammys", "coho", "4.tac0", "ambassador", "flo paris", "parliament", "whoodeli"]
 RMC = ["coho", "sammys", "4.tac0", "ambassador", "whoodeli", "parliament"] 
@@ -108,7 +108,7 @@ def print_menu(servery, dining_data):
                 menu_text += ", "
             elif m == len(menu) - 2:
                 menu_text += " and "
-    return menu_text
+    return menu_text + EMOJIS[random.choice(list(EMOJIS))]
 
 def servery_food_find(foods, dining_data):
     serveries = []
@@ -414,7 +414,7 @@ def get_response_text(message):
                     if is_open(servery, dining_data):
                         menu_text = print_menu(servery, dining_data)
                         if menu_text:
-                            response_message += menu_text + " today.\n \n"
+                            response_message += menu_text + " today. " + EMOJIS[random.choice(list(EMOJIS))] + "\n \n"
                         else:
                             response_message += "We don't know the menu for " + servery.capitalize() + " right now.\n \n"
 
@@ -430,7 +430,7 @@ def get_response_text(message):
         else:
             # Greeting message
             if wit_traits["greetings"]:
-                response_message += "Hello!\n"
+                response_message += "Hello!\n" 
 
             if wit_traits["thanks"]:
                 response_message += "You're welcome!\n"
