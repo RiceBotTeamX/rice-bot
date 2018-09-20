@@ -97,13 +97,13 @@ def print_menu(servery, dining_data):
     menu = menu_options(servery, dining_data)
     menu_text = ""
     if len(menu) > 0:
-        menu_text += servery.capitalize() + " is serving "
+        menu_text += servery.title() + " is serving "
         for m in range(len(menu)):
             if menu[m][:5] == "Open ":
                 menu_text += menu[m][5:]
             else:
                 menu_text += menu[m]
-                
+
             if m < len(menu) - 2:
                 menu_text += ", "
             elif m == len(menu) - 2:
