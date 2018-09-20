@@ -27,7 +27,7 @@ EXAMPLES = ["gluten-free", "is there vegetarian at West or South?", "r there egg
             "vegan at Sid?", "seibel", "where can i get chicken?", "what can i eat around McMurtry?"]
 EMOJIS = ['\U0001F600', '\U0001F44C', '\U0001F64C', '\U0001F37D']
 
-EATERIES = ["west", "north", "south", "seibel", "sid", "baker", "sammy's", "coho", "4.tac0", "ambassador", "flo paris", "parliament", "whoodeli"]
+EATERIES = ["west", "north", "south", "seibel", "sidrich", "baker", "sammy's", "coho", "4.tac0", "ambassador", "flo paris", "parliament", "whoodeli"]
 CONFIDENCE_THRESH = .75
 #MEALTIMES = {"breakfast" : }
 
