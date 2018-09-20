@@ -97,14 +97,13 @@ def print_menu(servery, dining_data):
     menu = menu_options(servery, dining_data)
     menu_text = ""
     if len(menu) > 0:
-        menu_text += servery.capitalize()
-        if servery in RMC:
-            menu_text += ": " # Because RMC eateries contain scheduling info in the menu
-        else:
-            menu_text += " is serving "
-
+        menu_text += servery.capitalize() + " is serving "
         for m in range(len(menu)):
-            menu_text += menu[m]
+            if menu[m][:5] == "Open ":
+                menu_text += menu[m][5:]
+            else:
+                menu_text += menu[m]
+                
             if m < len(menu) - 2:
                 menu_text += ", "
             elif m == len(menu) - 2:
