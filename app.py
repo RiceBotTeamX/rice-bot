@@ -24,7 +24,7 @@ bot = Bot(ACCESS_TOKEN) ## Create an instance of the bot
 
 HELP_MESSAGE = "I provide information about dining options, dietary restrictions, and schedules here at Rice!"
 EXAMPLES = ["gluten-free", "is there vegetarian at West or South?", "r there eggs at North today?",
-			"vegan at Sid?", "seibel", "where can i get chicken?", "what can i eat around McMurtry?"]
+            "vegan at Sid?", "seibel", "where can i get chicken?", "what can i eat around McMurtry?"]
 EMOJIS = ['\U0001F600', '\U0001F44C', '\U0001F64C', '\U0001F37D']
 WIT_TRAITS = {"greetings" : False, "thanks" : False, "bye" : False}
 
@@ -38,11 +38,11 @@ def help_statement():
     return response
 
 def example_questions():
-	questions = ""
-	for example in EXAMPLES:
-		questions += "\"" + example + "\"\n"
+    questions = ""
+    for example in EXAMPLES:
+        questions += "\"" + example + "\"\n"
 
-	return questions
+    return questions
 
 def verify_fb_token(token_sent):
     ## Verifies that the token sent by Facebook matches the token sent locally
@@ -270,9 +270,9 @@ def get_response_text(message):
 
         # Greetings, Thank You, Bye
         for trait in WIT_TRAITS:
-        	if train in nlp_entities:
-        		if nlp_entities[trait]['confidence'] > CONFIDENCE_THRESH:
-        			WIT_TRAITS[trait] = True
+            if train in nlp_entities:
+                if nlp_entities[trait]['confidence'] > CONFIDENCE_THRESH:
+                    WIT_TRAITS[trait] = True
 
 
         ##### CREATING THE MESSAGE #####
@@ -401,22 +401,22 @@ def get_response_text(message):
 
         # General help statements
         else:
-        	# Greeting message
-        	if WIT_TRAITS["greetings"]:
-		        	response_message += "Hello!\n"
+            # Greeting message
+            if WIT_TRAITS["greetings"]:
+                    response_message += "Hello!\n"
 
-		    if WIT_TRAITS["thanks"]:
-		        	response_message += "You're welcome!\n"
+            if WIT_TRAITS["thanks"]:
+                    response_message += "You're welcome!\n"
 
-		    if WIT_TRAITS["bye"]:
-		        	response_message += "You can chat with me whenever!\n"
+            if WIT_TRAITS["bye"]:
+                    response_message += "You can chat with me whenever!\n"
 
-			# General statement regarding eating
-	        if eating and not WIT_TRAITS["bye"]:
-	            response_message = "It seems like you're interested in eating. "
+            # General statement regarding eating
+            if eating and not WIT_TRAITS["bye"]:
+                response_message = "It seems like you're interested in eating. "
 
-	        # Help message
-	        response_message += help_statement()
+            # Help message
+            response_message += help_statement()
 
 
     if not response_message:
@@ -445,7 +445,7 @@ def receive_message():
         return verify_fb_token(token_sent)
 
     ## Handle POST requests
-    else: 
+    else:
         output = request.get_json() ## get whatever message a user sent the bot
 
         for event in output['entry']:
