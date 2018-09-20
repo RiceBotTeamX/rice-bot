@@ -108,7 +108,7 @@ def print_menu(servery, dining_data):
                 menu_text += ", "
             elif m == len(menu) - 2:
                 menu_text += " and "
-    return menu_text + EMOJIS[random.choice(list(EMOJIS))]
+    return menu_text
 
 def servery_food_find(foods, dining_data):
     serveries = []
