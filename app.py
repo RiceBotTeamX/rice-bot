@@ -12,9 +12,10 @@ import time
 from spell_checker import correct_sentence
 
 from wit import Wit
-dir_path = os.path.dirname(os.path.realpath(__file__))
 access_token = "GGDBZAV5X6J5CJBCKOOLWWWMMMMSHTHR"
 wit_client = Wit(access_token)
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
 
 app = Flask(__name__) ## This is how we create an instance of the Flask class for our app
 
@@ -25,15 +26,16 @@ bot = Bot(ACCESS_TOKEN) ## Create an instance of the bot
 HELP_MESSAGE = "I provide information about dining options, dietary restrictions, and schedules here at Rice!"
 EXAMPLES = ["gluten-free", "is there vegetarian at West or South?", "r there eggs at North today?",
             "vegan at Sid?", "seibel", "where can i get chicken?", "what can i eat around McMurtry?"]
-EMOJIS = ['\U0001F600', '\U0001F44C', '\U0001F64C', '\U0001F37D']
+EMOJIS = {"happy":'\U0001F600', "ok":'\U0001F44C', "praise":'\U0001F64C', "plate":'\U0001F37D'}
 
 EATERIES = ["west", "north", "south", "seibel", "sidrich", "baker", "sammy's", "coho", "4.tac0", "ambassador", "flo paris", "parliament", "whoodeli"]
+RMC = ["coho", "sammy's", "4.tac0", "ambassador", "whoodeli", "parliament"] 
 CONFIDENCE_THRESH = .75
 #MEALTIMES = {"breakfast" : }
 
 def help_statement():
-    response = HELP_MESSAGE + " Say something like \"" + random.choice(EXAMPLES) + "\" " + '\U0001F37D'
-    response += "\nType \"examples\" for a list of example questions."
+    response = HELP_MESSAGE + " Say something like \"" + random.choice(EXAMPLES) + "\" " + EMOJIS[random.choice(list(EMOJIS))]
+    response += "\n\nType \"examples\" for a list of example questions."
     return response
 
 def example_questions():
@@ -104,20 +106,33 @@ def print_menu(servery, dining_data):
                 menu_text += " and "
     return menu_text
 
-def servery_food_find(food, dining_data):
+def servery_food_find(foods, dining_data):
     serveries = []
     for row in dining_data:
         servery = row[0].lower()
-        if ((food in row[3].lower().split()) or (food in row[2].lower().split())) and servery not in serveries:
+        found = True
+        for food in foods:
+            if not ((food in row[3].lower().split()) or (food in row[2].lower().split())):
+                found = False
+                break
+
+        if found and servery not in serveries:
             serveries.append(servery)
+
     return serveries
 
-def single_servery_food_find(food, servery, dining_data):
+def single_servery_food_find(foods, servery, dining_data):
     meals = []
     for row in dining_data:
         serv = row[0].lower()
         if servery == serv:
-            if food in row[2].lower().split() or food in row[3].lower().split():
+            for food in foods:
+                found = True
+                if not (food in row[2].lower().split() or food in row[3].lower().split()):
+                    found = False
+                    break
+
+            if found:
                 meals.append(row[2])
 
     return meals
@@ -237,8 +252,13 @@ def get_response_text(message):
                     elif servery == "wiess":
                         servery = "south"
 
-                    if servery in EATERIES:
+
+                    if servery in EATERIES and servery not in serveries:
                         serveries.append(servery)
+                    elif servery == "rmc":
+                        for eatery in RMC:
+                            if eatery not in serveries:
+                                serveries.append(eatery)
 
         if ('mealtype' in nlp_entities):
             """
@@ -302,11 +322,12 @@ def get_response_text(message):
             # If no specific servery has been specified, look in them all
             if not serveries:
                 for diet in diets:
+                    diet_items = diet.split()
                     found_serveries_all = []
                     if inclusion:
-                        found_serveries_all = servery_food_find(diet, dining_data)
+                        found_serveries_all = servery_food_find(diet_items, dining_data)
                     else:
-                        found_serveries_all = servery_food_exclude(diet, dining_data)
+                        found_serveries_all = servery_food_exclude(diet_items, dining_data)
 
                     found_serveries = []
                     for serv in found_serveries_all:
@@ -348,10 +369,11 @@ def get_response_text(message):
                     if is_open(servery, dining_data):
                         for diet in diets:
                             found_meals = []
+                            diet_items = diet.split()
                             if inclusion:
-                                found_meals = single_servery_food_find(diet, servery, dining_data)
+                                found_meals = single_servery_food_find(diet_items, servery, dining_data)
                             else:
-                                found_meals = single_servery_food_exclude(diet, servery, dining_data)
+                                found_meals = single_servery_food_exclude(diet_items, servery, dining_data)
 
                             num_meals = len(found_meals)
                             if num_meals > 0:
@@ -416,6 +438,8 @@ def get_response_text(message):
             if wit_traits["bye"]:
                 response_message += "You can chat with me whenever!\n"
 
+            response_message += "\n"
+            
             # General statement regarding eating
             if eating and not wit_traits["bye"]:
                 response_message = "It seems like you're interested in eating. "
