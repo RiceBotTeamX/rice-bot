@@ -28,8 +28,8 @@ EXAMPLES = ["gluten-free", "is there vegetarian at West or South?", "r there egg
             "vegan at Sid?", "seibel", "where can i get chicken?", "what can i eat around McMurtry?"]
 EMOJIS = {"happy":'\U0001F600', "ok":'\U0001F44C', "praise":'\U0001F64C', "plate":'\U0001F37D'}
 
-EATERIES = ["west", "north", "south", "seibel", "sidrich", "baker", "sammy's", "coho", "4.tac0", "ambassador", "flo paris", "parliament", "whoodeli"]
-RMC = ["coho", "sammy's", "4.tac0", "ambassador", "whoodeli", "parliament"] 
+EATERIES = ["west", "north", "south", "seibel", "sidrich", "baker", "sammys", "coho", "4.tac0", "ambassador", "flo paris", "parliament", "whoodeli"]
+RMC = ["coho", "sammys", "4.tac0", "ambassador", "whoodeli", "parliament"] 
 CONFIDENCE_THRESH = .75
 #MEALTIMES = {"breakfast" : }
 
@@ -227,8 +227,8 @@ def get_response_text(message):
                     servery = s['value'].lower().strip()
 
                     # TODO: Make into a dictionary instead
-                    if servery == "sammys":
-                        servery = "sammy's"
+                    if servery == "sammy's":
+                        servery = "sammys"
                     elif servery == "sid richardson":
                         servery = "sidrich"
                     elif servery == "sid":
@@ -405,7 +405,7 @@ def get_response_text(message):
                                 response_message += " food today.\n \n"
 
                     else:
-                        response_message += servery.title() + " is closed today.\n \n"
+                        response_message += servery.title() + " is closed.\n \n"
 
         # Servery inquiry
         elif (serveries_mentioned):
@@ -420,7 +420,7 @@ def get_response_text(message):
 
                     # If the servery is closed
                     else:
-                        response_message += servery.title() + " is closed today.\n \n"
+                        response_message += servery.title() + " is closed.\n \n"
 
             # If the eatery is unrecognized
             elif len(nlp_entities) == 1 or (len(nlp_entities) == 2 and "eating" in nlp_entities):
