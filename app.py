@@ -377,11 +377,7 @@ def get_response_text(message):
 
                             num_meals = len(found_meals)
                             if num_meals > 0:
-                                response_message += servery.title() + " is serving"
-                                if num_meals > 1:
-                                    response_message += " these "
-                                else:
-                                    response_message += " this "
+                                response_message += servery.title() + " is serving these "
 
                                 response_message += diet
 
