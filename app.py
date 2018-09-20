@@ -216,7 +216,7 @@ def get_response_text(message):
                         servery = "sammy's"
                     elif servery == "sid richardson":
                         servery = "sidrich"
-                    elif server == "sid":
+                    elif servery == "sid":
                         servery = "sidrich"
                     elif servery == "duncan":
                         servery = "west"
