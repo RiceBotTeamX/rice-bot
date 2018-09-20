@@ -27,7 +27,7 @@ EXAMPLES = ["gluten-free", "is there vegetarian at West or South?", "r there egg
             "vegan at Sid?", "seibel", "where can i get chicken?", "what can i eat around McMurtry?"]
 EMOJIS = ['\U0001F600', '\U0001F44C', '\U0001F64C', '\U0001F37D']
 
-EATERIES = ["west", "north", "south", "seibel", "sid", "baker", "sammy's"] # Brochstein?
+EATERIES = ["west", "north", "south", "seibel", "sid", "baker", "sammy's", "coho", "4.tac0", "ambassador", "flo paris", "parliament", "whoodeli"]
 CONFIDENCE_THRESH = .75
 #MEALTIMES = {"breakfast" : }
 
@@ -215,7 +215,9 @@ def get_response_text(message):
                     if servery == "sammys":
                         servery = "sammy's"
                     elif servery == "sid richardson":
-                        servery = "sid"
+                        servery = "sidrich"
+                    elif server == "sid":
+                        servery = "sidrich"
                     elif servery == "duncan":
                         servery = "west"
                     elif servery == "mcmurtry":
@@ -232,7 +234,7 @@ def get_response_text(message):
                         servery = "seibel"
                     elif servery == "hanszen":
                         servery = "south"
-                    elif servery == "weiss":
+                    elif servery == "wiess":
                         servery = "south"
 
                     if servery in EATERIES:
@@ -312,7 +314,7 @@ def get_response_text(message):
                             found_serveries.append(serv)
 
                     for serv in range(len(found_serveries)):
-                        response_message += found_serveries[serv].capitalize()
+                        response_message += found_serveries[serv].title()
                         if serv < len(found_serveries) - 2:
                             response_message += ", "
                         elif serv == len(found_serveries) - 2:
@@ -353,7 +355,7 @@ def get_response_text(message):
 
                             num_meals = len(found_meals)
                             if num_meals > 0:
-                                response_message += servery.capitalize() + " is serving"
+                                response_message += servery.title() + " is serving"
                                 if num_meals > 1:
                                     response_message += " these "
                                 else:
@@ -375,13 +377,13 @@ def get_response_text(message):
                                 response_message += "\n \n"
 
                             else: # The servery has no options of this diet
-                                response_message += servery.capitalize() + " is not serving any " + diet
+                                response_message += servery.title() + " is not serving any " + diet
                                 if not inclusion:
                                     response_message += " free"
                                 response_message += " food today.\n \n"
 
                     else:
-                        response_message += servery.capitalize() + " is closed today.\n \n"
+                        response_message += servery.title() + " is closed today.\n \n"
 
         # Servery inquiry
         elif (serveries_mentioned):
@@ -396,7 +398,7 @@ def get_response_text(message):
 
                     # If the servery is closed
                     else:
-                        response_message += servery.capitalize() + " is closed today.\n \n"
+                        response_message += servery.title() + " is closed today.\n \n"
 
             # If the eatery is unrecognized
             elif len(nlp_entities) == 1 or (len(nlp_entities) == 2 and "eating" in nlp_entities):
