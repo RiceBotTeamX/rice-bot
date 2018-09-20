@@ -414,7 +414,7 @@ def get_response_text(message):
                     if is_open(servery, dining_data):
                         menu_text = print_menu(servery, dining_data)
                         if menu_text:
-                            response_message += menu_text + " today.\n"
+                            response_message += menu_text + " today.\n \n"
                         else:
                             response_message += "We don't know the menu for " + servery.capitalize() + " right now.\n \n"
 
@@ -439,7 +439,7 @@ def get_response_text(message):
                 response_message += "You can chat with me whenever!\n"
 
             response_message += "\n"
-            
+
             # General statement regarding eating
             if eating and not wit_traits["bye"]:
                 response_message = "It seems like you're interested in eating. "
