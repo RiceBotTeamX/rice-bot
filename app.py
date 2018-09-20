@@ -30,7 +30,7 @@ CONFIDENCE_THRESH = .575
 #MEALTIMES = {"breakfast" : }
 
 def help_statement():
-    return HELP_MESSAGE + " Ask me a question like \"" + random.choice(EXAMPLES) + "\""
+    return HELP_MESSAGE + " Ask me a question like \"" + random.choice(EXAMPLES) + "\"" + u'\U0001F604'
 
 def verify_fb_token(token_sent):
     ## Verifies that the token sent by Facebook matches the token sent locally
