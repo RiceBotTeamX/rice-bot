@@ -26,7 +26,6 @@ HELP_MESSAGE = "I provide information about dining options, dietary restrictions
 EXAMPLES = ["gluten-free", "is there vegetarian at West or South?", "r there eggs at North today?",
             "vegan at Sid?", "seibel", "where can i get chicken?", "what can i eat around McMurtry?"]
 EMOJIS = ['\U0001F600', '\U0001F44C', '\U0001F64C', '\U0001F37D']
-WIT_TRAITS = {"greetings" : False, "thanks" : False, "bye" : False}
 
 EATERIES = ["west", "north", "south", "seibel", "sid", "baker", "sammy's"] # Brochstein?
 CONFIDENCE_THRESH = .75
@@ -173,6 +172,7 @@ def get_response_text(message):
         foodtype_input = []
         diet_input = []
 
+        wit_traits = {"greetings" : False, "thanks" : False, "bye" : False}
 
         if ('eating' in nlp_entities and nlp_entities['eating'][0]['confidence'] > CONFIDENCE_THRESH):
             #response_message += "I am " + str(round(nlp_entities['eating'][0]['confidence'] * 100)) + \
@@ -211,6 +211,7 @@ def get_response_text(message):
                 if s['confidence'] > CONFIDENCE_THRESH:
                     servery = s['value'].lower().strip()
 
+                    # TODO: Make into a dictionary instead
                     if servery == "sammys":
                         servery = "sammy's"
                     elif servery == "sid richardson":
@@ -269,10 +270,12 @@ def get_response_text(message):
                     diet_input.append(d['value'])
 
         # Greetings, Thank You, Bye
-        for trait in WIT_TRAITS:
-            if train in nlp_entities:
-                if nlp_entities[trait]['confidence'] > CONFIDENCE_THRESH:
-                    WIT_TRAITS[trait] = True
+        for trait in wit_traits:
+            if trait in nlp_entities:
+                for item in nlp_entities[trait]:
+                    if item['confidence'] > .9:
+                        wit_traits[trait] = True
+                        break
 
 
         ##### CREATING THE MESSAGE #####
@@ -402,17 +405,17 @@ def get_response_text(message):
         # General help statements
         else:
             # Greeting message
-            if WIT_TRAITS["greetings"]:
-                    response_message += "Hello!\n"
+            if wit_traits["greetings"]:
+                response_message += "Hello!\n"
 
-            if WIT_TRAITS["thanks"]:
-                    response_message += "You're welcome!\n"
+            if wit_traits["thanks"]:
+                response_message += "You're welcome!\n"
 
-            if WIT_TRAITS["bye"]:
-                    response_message += "You can chat with me whenever!\n"
+            if wit_traits["bye"]:
+                response_message += "You can chat with me whenever!\n"
 
             # General statement regarding eating
-            if eating and not WIT_TRAITS["bye"]:
+            if eating and not wit_traits["bye"]:
                 response_message = "It seems like you're interested in eating. "
 
             # Help message
