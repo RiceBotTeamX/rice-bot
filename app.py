@@ -3,7 +3,7 @@ from flask import Flask, request
 from pymessenger.bot import Bot
 import random
 import sys
-import os 
+import os
 import json
 import csv
 import subprocess
@@ -22,16 +22,27 @@ ACCESS_TOKEN = os.environ['ACCESS_TOKEN']
 VERIFY_TOKEN = os.environ['VERIFY_TOKEN']
 bot = Bot(ACCESS_TOKEN) ## Create an instance of the bot
 
-HELP_MESSAGE = "I can provide information about dining options, allergies, and schedules here at Rice!"
-EXAMPLES = ["gluten-free", "is there vegetarian at West or Seibel?", "are eggs served at North today?", "vegan at South?", "west"]
+HELP_MESSAGE = "I provide information about dining options, dietary restrictions, and schedules here at Rice!"
+EXAMPLES = ["gluten-free", "is there vegetarian at West or South?", "r there eggs at North today?",
+			"vegan at Sid?", "seibel", "where can i get chicken?", "what can i eat around McMurtry?"]
 EMOJIS = ['\U0001F600', '\U0001F44C', '\U0001F64C', '\U0001F37D']
+WIT_TRAITS = {"greetings" : False, "thanks" : False, "bye" : False}
 
-EATERIES = ["west", "north", "south", "seibel", "sid", "baker", "sammy's"]
-CONFIDENCE_THRESH = .575
+EATERIES = ["west", "north", "south", "seibel", "sid", "baker", "sammy's"] # Brochstein?
+CONFIDENCE_THRESH = .75
 #MEALTIMES = {"breakfast" : }
 
 def help_statement():
-    return HELP_MESSAGE + " Ask me a question like \"" + random.choice(EXAMPLES) + "\" " + '\U0001F37D'
+    response = HELP_MESSAGE + " Say something like \"" + random.choice(EXAMPLES) + "\" " + '\U0001F37D'
+    response += "\nType \"examples\" for a list of example questions."
+    return response
+
+def example_questions():
+	questions = ""
+	for example in EXAMPLES:
+		questions += "\"" + example + "\"\n"
+
+	return questions
 
 def verify_fb_token(token_sent):
     ## Verifies that the token sent by Facebook matches the token sent locally
@@ -47,7 +58,7 @@ def time_stamp_gen():
 def dining_reader():
     filename = "diningData-" + time_stamp_gen() + ".csv"
     dining_data_file = "./data/" + filename
-    print ("file name: ", dining_data_file)
+    # print ("file name: ", dining_data_file)
     # If there is no file in the data folder with todays date, call ruby.
     # Else, use the file in the data folder.
     if (not os.path.isfile(dining_data_file)):
@@ -139,14 +150,16 @@ def get_response_text(message):
     else:
         return help_statement()
 
-    response_message = ""
-
-    message_text_correct = correct_sentence(message_text)
+    message_text_correct = correct_sentence(message_text) # Currently disabled in the correct_sentence function
 
     nlp_response = wit_client.message(message_text_correct)
 
-    if ('entities' in nlp_response):
+    if message_text.lower().strip() == "examples" or message_text.lower().strip() == "example":
+    	return example_questions()
 
+    response_message = ""
+
+    if ('entities' in nlp_response):
         nlp_entities = nlp_response['entities']
 
         dining_data = dining_reader()
@@ -154,11 +167,12 @@ def get_response_text(message):
         eating = False
         schedule = []
         time_input = []
-        serveries = []
         serveries_mentioned = False
+        serveries = []
         mealtype_input = []
         foodtype_input = []
         diet_input = []
+
 
         if ('eating' in nlp_entities and nlp_entities['eating'][0]['confidence'] > CONFIDENCE_THRESH):
             #response_message += "I am " + str(round(nlp_entities['eating'][0]['confidence'] * 100)) + \
@@ -192,7 +206,6 @@ def get_response_text(message):
             #                    "% confident you are talking about serveries\n"
 
             entity = nlp_entities['serveries']
-            serveries = []
             serveries_mentioned = True
             for s in entity:
                 if s['confidence'] > CONFIDENCE_THRESH:
@@ -229,7 +242,6 @@ def get_response_text(message):
             response_message += "I am " + str(round(nlp_entities['mealtype'][0]['confidence'] * 100)) + \
                                 "% confident you are talking about meals\n"
             """
-
             entity = nlp_entities['mealtype']
             for m in entity:
                 if m['confidence'] > CONFIDENCE_THRESH:
@@ -256,10 +268,17 @@ def get_response_text(message):
                 if d['confidence'] > CONFIDENCE_THRESH:
                     diet_input.append(d['value'])
 
+        # Greetings, Thank You, Bye
+        for trait in WIT_TRAITS:
+        	if train in nlp_entities:
+        		if nlp_entities[trait]['confidence'] > CONFIDENCE_THRESH:
+        			WIT_TRAITS[trait] = True
+
 
         ##### CREATING THE MESSAGE #####
+        # Food-specific inquiry
         if diet_input or foodtype_input:
-            # Determine whether we should look for foods or exclude foods
+            # Determine whether we should look for certain foods or exclude certain foods
             inclusion = False
             
             diets = foodtype_input[:]
@@ -318,7 +337,7 @@ def get_response_text(message):
 
                         response_message += " options today.\n \n"
 
-            # If serveries have been specified
+            # If serveries have been specified, search in them
             else:
                 for servery in serveries:
                     if is_open(servery, dining_data):
@@ -361,7 +380,7 @@ def get_response_text(message):
                     else:
                         response_message += servery.capitalize() + " is closed today.\n \n"
 
-
+        # Servery inquiry
         elif (serveries_mentioned):
             if serveries:
                 for servery in serveries:
@@ -380,9 +399,24 @@ def get_response_text(message):
             elif len(nlp_entities) == 1 or (len(nlp_entities) == 2 and "eating" in nlp_entities):
                 response_message += "It seems like you're interested in serveries. " + help_statement() + "\n"
 
-        # General statement regarding eating
-        elif (eating and len(nlp_entities) == 1):
-            response_message = "It seems like you're interested in eating. " + help_statement()
+        # General help statements
+        else:
+        	# Greeting message
+        	if WIT_TRAITS["greetings"]:
+		        	response_message += "Hello!\n"
+
+		    if WIT_TRAITS["thanks"]:
+		        	response_message += "You're welcome!\n"
+
+		    if WIT_TRAITS["bye"]:
+		        	response_message += "You can chat with me whenever!\n"
+
+			# General statement regarding eating
+	        if eating and not WIT_TRAITS["bye"]:
+	            response_message = "It seems like you're interested in eating. "
+
+	        # Help message
+	        response_message += help_statement()
 
 
     if not response_message:
