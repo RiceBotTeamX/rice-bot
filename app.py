@@ -155,7 +155,7 @@ def get_response_text(message):
     nlp_response = wit_client.message(message_text_correct)
 
     if message_text.lower().strip() == "examples" or message_text.lower().strip() == "example":
-    	return example_questions()
+        return example_questions()
 
     response_message = ""
 
