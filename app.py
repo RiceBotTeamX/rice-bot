@@ -201,20 +201,16 @@ def get_response_text(message):
             eating = True         
 
         if ('schedule' in nlp_entities):
-            """
-            response_message += "I am " + str(round(nlp_entities['schedule'][0]['confidence'] * 100)) + \
-                                "% confident you are talking about schedules\n"
-            """
+            #response_message += "I am " + str(round(nlp_entities['schedule'][0]['confidence'] * 100)) + \
+            #                    "% confident you are talking about schedules\n"
             entity = nlp_entities['schedule']
             for s in entity:
                 if s['confidence'] > CONFIDENCE_THRESH:
                     schedule.append(s['value'].lower().strip())
 
         if ('datetime' in nlp_entities):
-            """
-            response_message += "I am " + str(round(nlp_entities['datetime'][0]['confidence'] * 100)) + \
-                                "% confident you are talking about date and time\n"
-            """
+            #response_message += "I am " + str(round(nlp_entities['datetime'][0]['confidence'] * 100)) + \
+            #                    "% confident you are talking about date and time\n"
             entity = nlp_entities['datetime']
             for t in entity:
                 if 'confidence' in t and t['confidence'] > CONFIDENCE_THRESH and 'value' in t:
@@ -223,11 +219,11 @@ def get_response_text(message):
         if ('serveries' in nlp_entities):
             #response_message += "I am " + str(round(nlp_entities['serveries'][0]['confidence'] * 100)) + \
             #                    "% confident you are talking about serveries\n"
-
             entity = nlp_entities['serveries']
-            serveries_mentioned = True
+            
             for s in entity:
                 if s['confidence'] > CONFIDENCE_THRESH:
+                    serveries_mentioned = True
                     servery = s['value'].lower().strip()
 
                     # TODO: Make into a dictionary instead
@@ -265,10 +261,8 @@ def get_response_text(message):
                                 serveries.append(eatery)
 
         if ('mealtype' in nlp_entities):
-            """
-            response_message += "I am " + str(round(nlp_entities['mealtype'][0]['confidence'] * 100)) + \
-                                "% confident you are talking about meals\n"
-            """
+            #response_message += "I am " + str(round(nlp_entities['mealtype'][0]['confidence'] * 100)) + \
+            #                    "% confident you are talking about meals\n"
             entity = nlp_entities['mealtype']
             for m in entity:
                 if m['confidence'] > CONFIDENCE_THRESH:
@@ -276,20 +270,16 @@ def get_response_text(message):
 
 
         if ('foodtype' in nlp_entities):
-            """
-            response_message += "I am " + str(round(nlp_entities['foodtype'][0]['confidence'] * 100)) + \
-                                "% confident you are talking about foods\n"
-            """
+            #response_message += "I am " + str(round(nlp_entities['foodtype'][0]['confidence'] * 100)) + \
+            #                    "% confident you are talking about foods\n"
             entity = nlp_entities['foodtype']
             for f in entity:
                 if f['confidence'] > CONFIDENCE_THRESH:
                     foodtype_input.append(f['value'])
 
         if ('dietary' in nlp_entities):
-            """
-            response_message += "I am " + str(round(nlp_entities['dietary'][0]['confidence'] * 100)) + \
-                                "% confident you are talking about dietary restrictions\n"
-            """
+            #response_message += "I am " + str(round(nlp_entities['dietary'][0]['confidence'] * 100)) + \
+            #                    "% confident you are talking about dietary restrictions\n"
             entity = nlp_entities['dietary']
             for d in entity:
                 if d['confidence'] > CONFIDENCE_THRESH:
