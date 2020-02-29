@@ -52,7 +52,7 @@ GEM
       heroics (~> 0.0.25)
       moneta (~> 1.0.0)
     rack (2.0.5)
-    rake (12.3.1)
+    rake (12.3.3)
     redis (4.0.2)
     repl_runner (0.0.3)
       activesupport
